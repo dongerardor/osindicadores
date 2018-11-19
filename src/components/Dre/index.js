@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
-class Inicio extends Component {
+class Dre extends Component {
   render() {
     return (
       <header className="App-header">
           <p>
-            inicio
+            dre
           </p>
         </header>
     );
   }
 }
 
-export default Inicio;
+export default Dre;
