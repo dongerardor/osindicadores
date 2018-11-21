@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import './App.css';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -15,7 +15,7 @@ import Rentabilidade from './components/Rentabilidade';
 import Cenarios from './components/Cenarios';
 import Precificador from './components/Precificador';
 
-import ButtonAppBar from './components/navigation/ButtonAppBar';
+import MenuAppBar from './components/navigation/MenuAppBar';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -35,21 +35,38 @@ class App extends Component {
         type: 'dark',
       },
     });
+    this.state = {
+      section: 'Dashboard',
+    };
+    this.prevSection = 'Dashboard';
+  }
+
+  onSetSection = section => {
+    this.setState({section});
   }
 
   render() {
+    const { section } = this.state;
+    let isRedirecting = false;
+    if (this.prevSection !== section) {
+      this.prevSection = section;
+      isRedirecting = true;
+    }
     return (
       <MuiThemeProvider theme={this.theme}>
         <CssBaseline />
       
           <div className="App">
 
-            <ButtonAppBar/>
-            <p>Pipoca pi</p>
-
+            <MenuAppBar
+              onSetSection={this.onSetSection}
+            />
+            
             <div id='container'>
               <Router>
                 <Switch>
+                  {isRedirecting && <Redirect to={ section } /> }
+
                   <Route path="/receitas" component={Receitas} />
                   <Route path="/despesas" component={Despesas} />
                   <Route path="/folha" component={Folha} />
@@ -61,6 +78,7 @@ class App extends Component {
                   <Route path="/" component={Dashboard} />
                 </Switch>
               </Router>
+              
             </div>
         </div>
       </MuiThemeProvider>
